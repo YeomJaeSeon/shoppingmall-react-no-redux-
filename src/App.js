@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Logo from "./components/Logo";
+import Buttons from "./components/Buttons";
+import Items from "./components/Items";
+import styled, { createGlobalStyle } from "styled-components";
+import data from "./data/data.json";
 
-function App() {
+const GlobalStyle = createGlobalStyle`
+body{
+  background-color:#3f454d;
+}
+`;
+const Container = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export default function App() {
+  const [item, setItem] = useState([]);
+
+  const filtering = (filterValue) => {
+    if (filterValue === "all") {
+      setItem(data.items);
+    } else if (filterValue === "skirt") {
+      setItem(data.items.filter((value) => value.type === "skirt"));
+    } else if (filterValue === "tshirt") {
+      setItem(data.items.filter((value) => value.type === "tshirt"));
+    } else if (filterValue === "pants") {
+      setItem(data.items.filter((value) => value.type === "pants"));
+    } else if (filterValue === "blue") {
+      setItem(data.items.filter((value) => value.color === "blue"));
+    } else if (filterValue === "yellow") {
+      setItem(data.items.filter((value) => value.color === "yellow"));
+    } else {
+      setItem(data.items.filter((value) => value.color === "pink"));
+    }
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <GlobalStyle />
+      <Logo filtering={filtering}></Logo>
+      <Buttons filtering={filtering}></Buttons>
+      <Items item1={item}></Items>
+    </Container>
   );
 }
-
-export default App;
